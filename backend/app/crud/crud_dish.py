@@ -1,4 +1,5 @@
 from typing import Any, Dict, List
+from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -16,8 +17,8 @@ def get_dish(db: Session, dish_id: int) -> Dish:
     return db.query(Dish).filter(Dish.id == dish_id).first()
 
 
-def create_dish(db: Session, dish: DishCreate):
-    db_dish = Dish(**dish.dict())
+def create_dish(db: Session, submenu_id: UUID, dish: DishCreate):
+    db_dish = Dish(**dish.dict(), submenu_id=submenu_id)
     db.add(db_dish)
     db.commit()
     db.refresh(db_dish)

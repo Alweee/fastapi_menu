@@ -21,8 +21,8 @@ class SubmenuUpdate(SubmenuBase):
 
 class Submenu(SubmenuBase):
     id: Optional[UUID] = uuid4()
-    menu_id: int
-    dishes: list[Dish] = []
+    menu_id: UUID
+    dishes_count: int
 
     class Config:
         orm_mode = True

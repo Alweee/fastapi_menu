@@ -1,4 +1,5 @@
 from typing import Any, Dict, List
+from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -16,8 +17,8 @@ def get_submenu(db: Session, submenu_id: int) -> Submenu:
     return db.query(Submenu).filter(Submenu.id == submenu_id).first()
 
 
-def create_submenu(db: Session, submenu: SubmenuCreate):
-    db_submenu = Submenu(**submenu.dict())
+def create_submenu(db: Session, menu_id: UUID, submenu: SubmenuCreate):
+    db_submenu = Submenu(**submenu.dict(), menu_id=menu_id)
     db.add(db_submenu)
     db.commit()
     db.refresh(db_submenu)

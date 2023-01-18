@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
-from .submenu import Submenu
+from app.schemas.submenu import Submenu
 
 
 class MenuBase(BaseModel):
@@ -19,9 +19,10 @@ class MenuUpdate(MenuBase):
     ...
 
 
-class Menu(MenuBase):
+class MenuOut(MenuBase):
     id: Optional[UUID] = uuid4()
-    submenus: list[Submenu] = []
+    submenus_count: int
+    dishes_count: int
 
     class Config:
         orm_mode = True

@@ -14,7 +14,7 @@ def get_menu(db: Session, menu_id: int) -> Menu:
     return db.query(Menu).filter(Menu.id == menu_id).first()
 
 
-def create_menu(db: Session, menu: MenuCreate):
+def create_menu(db: Session, menu: MenuCreate) -> Menu:
     db_menu = Menu(**menu.dict())
     db.add(db_menu)
     db.commit()

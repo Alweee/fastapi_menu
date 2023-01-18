@@ -21,7 +21,7 @@ class DishUpdate(DishBase):
 
 class Dish(DishBase):
     id: Optional[UUID] = uuid4()
-    submenu_id: int
+    submenu_id: UUID
 
     class Config:
         orm_mode = True
