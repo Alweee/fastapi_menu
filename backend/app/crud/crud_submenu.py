@@ -3,8 +3,13 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
+from app.models.dish import Dish
 from app.models.submenu import Submenu
-from app.schemas.submenu import SubmenuCreate, SubmenuUpdate
+from app.schemas.submenu import SubmenuCreateIn, SubmenuUpdateIn
+
+
+def get_count_dishes_for_submenu(db: Session, submenu_id: UUID) -> int:
+    return db.query(Dish).filter(Dish.submenu_id == submenu_id).count()
 
 
 def get_submenus(
@@ -17,7 +22,9 @@ def get_submenu(db: Session, submenu_id: int) -> Submenu:
     return db.query(Submenu).filter(Submenu.id == submenu_id).first()
 
 
-def create_submenu(db: Session, menu_id: UUID, submenu: SubmenuCreate):
+def create_submenu(
+    db: Session, menu_id: UUID, submenu: SubmenuCreateIn
+) -> Submenu:
     db_submenu = Submenu(**submenu.dict(), menu_id=menu_id)
     db.add(db_submenu)
     db.commit()
@@ -26,9 +33,8 @@ def create_submenu(db: Session, menu_id: UUID, submenu: SubmenuCreate):
 
 
 def update_submenu(
-    db: Session, submenu_id: int, submenu: SubmenuUpdate
+    db: Session, submenu: SubmenuUpdateIn, db_submenu: Submenu
 ) -> Submenu:
-    db_submenu = db.query(Submenu).filter(Submenu.id == submenu_id).first()
     update_data = submenu.dict(exclude_unset=True)
     for field in db_submenu:
         if field in update_data:

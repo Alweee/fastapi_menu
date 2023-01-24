@@ -1,8 +1,8 @@
 from fastapi import Depends, FastAPI
 
-from app.dependencies import get_db
-from app.routers import dishes, menus, submenus
 from app.db.database import Base, engine
+from app.routers import dishes, menus, submenus
+from .dependencies import get_db
 
 # Base.metadata.create_all(bind=engine)
 

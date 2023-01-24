@@ -1,9 +1,6 @@
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel
-
-from app.schemas.submenu import Submenu
 
 
 class MenuBase(BaseModel):
@@ -11,16 +8,16 @@ class MenuBase(BaseModel):
     description: str
 
 
-class MenuCreate(MenuBase):
+class MenuCreateIn(MenuBase):
     ...
 
 
-class MenuUpdate(MenuBase):
+class MenuUpdateIn(MenuBase):
     ...
 
 
 class MenuOut(MenuBase):
-    id: Optional[UUID] = uuid4()
+    id: UUID = uuid4()
     submenus_count: int
     dishes_count: int
 

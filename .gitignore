@@ -131,6 +131,3 @@ dmypy.json
 # custom
 .vscode
 *.DS_Store
-.DS_Store
-.DS_Store?
-backend/.DS_Store
