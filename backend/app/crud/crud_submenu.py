@@ -36,7 +36,7 @@ def update_submenu(
     db: Session, submenu: SubmenuUpdateIn, db_submenu: Submenu
 ) -> Submenu:
     update_data = submenu.dict(exclude_unset=True)
-    for field in db_submenu:
+    for field in db_submenu.__dict__:
         if field in update_data:
             setattr(db_submenu, field, update_data[field])
     db.add(db_submenu)

@@ -17,4 +17,4 @@ class Submenu(Base):
 
     menu = relationship('Menu', back_populates='submenus')
     dishes = relationship(
-        'Dish', cascade="all,delete", back_populates='submenu')
+        'Dish', cascade='all, delete', back_populates='submenu')

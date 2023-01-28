@@ -8,14 +8,14 @@ from sqlalchemy.orm import Session
 from app.crud.crud_dish import (get_dishes, get_dish, create_dish, update_dish,
                                 remove_dish)
 from app.dependencies import get_db
-from app.schemas.dish import Dish, DishCreate, DishUpdate
+from app.schemas.dish import DishOut, DishCreateIn, DishUpdateIn
 
-router = APIRouter(prefix='/api/v1/menus',)
+router = APIRouter(prefix='/api/v1/menus')
 
 
 @router.get(
     '/{menu_id}/submenus/{submenu_id}/dishes/',
-    response_model=List[Dish])
+    response_model=List[DishOut])
 def read_dishes(
     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):
@@ -25,8 +25,8 @@ def read_dishes(
 
 @router.get(
     '/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}',
-    response_model=Dish)
-def read_dish(dish_id: int, db: Session = Depends(get_db)):
+    response_model=DishOut)
+def read_dish(dish_id: UUID, db: Session = Depends(get_db)):
     db_dish = get_dish(db=db, dish_id=dish_id)
     if db_dish is None:
         raise HTTPException(status_code=404, detail='dish not found')
@@ -35,26 +35,28 @@ def read_dish(dish_id: int, db: Session = Depends(get_db)):
 
 @router.post(
     '/{menu_id}/submenus/{submenu_id}/dishes/',
-    response_model=Dish, status_code=status.HTTP_201_CREATED)
-def dish_create(submenu_id: UUID, dish: DishCreate, db: Session = Depends(get_db)):
+    response_model=DishOut, status_code=status.HTTP_201_CREATED)
+def dish_create(
+    submenu_id: UUID, dish: DishCreateIn, db: Session = Depends(get_db)
+):
     return create_dish(db=db, submenu_id=submenu_id, dish=dish)
 
 
 @router.patch(
     '/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}',
-    response_model=Dish)
+    response_model=DishOut)
 def dish_update(
-    dish_id: int, dish: DishUpdate,
+    dish_id: UUID, dish: DishUpdateIn,
     db: Session = Depends(get_db)
 ):
     db_dish = get_dish(db=db, dish_id=dish_id)
     if db_dish is None:
         raise HTTPException(status_code=404, detail='dish not found')
-    return update_dish(db=db, dish_id=dish_id, dish=dish)
+    return update_dish(db=db, dish=dish, db_dish=db_dish)
 
 
 @router.delete(
     '/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}',
     response_model=Dict[str, Any])
-def delete_dish(dish_id: int, db: Session = Depends(get_db)):
+def delete_dish(dish_id: UUID, db: Session = Depends(get_db)):
     return remove_dish(db=db, dish_id=dish_id)

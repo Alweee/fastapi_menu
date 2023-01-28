@@ -15,4 +15,4 @@ class Menu(Base):
     description = Column(String, unique=True)
 
     submenus = relationship(
-        'Submenu', cascade="all,delete", back_populates='menu')
+        'Submenu', cascade='all, delete', back_populates='menu')

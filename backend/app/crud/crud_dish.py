@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.models.dish import Dish
-from app.schemas.dish import DishCreate, DishUpdate
+from app.schemas.dish import DishCreateIn, DishUpdateIn
 
 
 def get_dishes(
@@ -17,7 +17,7 @@ def get_dish(db: Session, dish_id: int) -> Dish:
     return db.query(Dish).filter(Dish.id == dish_id).first()
 
 
-def create_dish(db: Session, submenu_id: UUID, dish: DishCreate):
+def create_dish(db: Session, submenu_id: UUID, dish: DishCreateIn):
     db_dish = Dish(**dish.dict(), submenu_id=submenu_id)
     db.add(db_dish)
     db.commit()
@@ -25,10 +25,9 @@ def create_dish(db: Session, submenu_id: UUID, dish: DishCreate):
     return db_dish
 
 
-def update_dish(db: Session, dish_id: int, dish: DishUpdate) -> Dish:
-    db_dish = db.query(Dish).filter(Dish.id == dish_id).first()
+def update_dish(db: Session, dish: DishUpdateIn, db_dish: Dish) -> Dish:
     update_data = dish.dict(exclude_unset=True)
-    for field in db_dish:
+    for field in db_dish.__dict__:
         if field in update_data:
             setattr(db_dish, field, update_data[field])
     db.add(db_dish)

@@ -11,17 +11,16 @@ class DishBase(BaseModel):
     price: str
 
 
-class DishCreate(DishBase):
+class DishCreateIn(DishBase):
     ...
 
 
-class DishUpdate(DishBase):
+class DishUpdateIn(DishBase):
     ...
 
 
-class Dish(DishBase):
+class DishOut(DishBase):
     id: Optional[UUID] = uuid4()
-    submenu_id: UUID
 
     class Config:
         orm_mode = True
